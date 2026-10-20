@@ -8,6 +8,9 @@ site/history/articles/, then writes the lists on:
   site/history/index.html     (history articles)
   site/articles/index.html    (every article, both sections)
 
+It also lists every file in site/catacombs/files/ on
+site/catacombs/index.html.
+
 Each list sits between <!-- ARTICLES:START name --> and
 <!-- ARTICLES:END --> markers, and only that part of the page is replaced.
 
@@ -25,6 +28,7 @@ Files whose names start with an underscore are treated as drafts and skipped.
 import datetime
 import html
 import re
+import urllib.parse
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent / "site"
@@ -132,6 +136,59 @@ def fill(page, name, items_html):
     page.write_text(new_text, encoding="utf-8")
 
 
+# ---------- THE CATACOMBS ----------
+
+KINDS = {
+    "pdf": "PDF",
+    "doc": "Doc", "docx": "Doc", "odt": "Doc", "rtf": "Doc", "txt": "Text", "md": "Text",
+    "xls": "Sheet", "xlsx": "Sheet", "ods": "Sheet", "csv": "Sheet",
+    "ppt": "Slides", "pptx": "Slides", "odp": "Slides",
+    "png": "Image", "jpg": "Image", "jpeg": "Image", "gif": "Image", "webp": "Image", "svg": "Image",
+    "mp3": "Audio", "wav": "Audio", "flac": "Audio", "ogg": "Audio",
+    "mp4": "Video", "mov": "Video", "webm": "Video",
+    "zip": "Archive", "7z": "Archive", "tar": "Archive", "gz": "Archive",
+    "otf": "Font", "ttf": "Font", "woff": "Font", "woff2": "Font",
+    "html": "Page", "htm": "Page",
+}
+
+
+def human_size(n):
+    for unit in ("B", "KB", "MB", "GB"):
+        if n < 1024 or unit == "GB":
+            return f"{n:.0f} {unit}" if unit == "B" else f"{n:.1f} {unit}"
+        n /= 1024
+
+
+def catacomb_items(indent):
+    folder = ROOT / "catacombs" / "files"
+    files = []
+    if folder.is_dir():
+        for p in folder.rglob("*"):
+            rel = p.relative_to(folder)
+            # Skip folders, hidden files, and drafts (anything starting with . or _)
+            if not p.is_file() or any(part.startswith((".", "_")) for part in rel.parts):
+                continue
+            files.append((rel, p.stat().st_size))
+
+    if not files:
+        return f'{indent}<li class="empty">Nothing buried here yet.</li>', 0
+
+    files.sort(key=lambda f: [part.lower() for part in f[0].parts])
+    lines = []
+    for rel, size in files:
+        href = "files/" + "/".join(urllib.parse.quote(part) for part in rel.parts)
+        kind = KINDS.get(rel.suffix.lower().lstrip("."), rel.suffix.lstrip(".").upper() or "File")
+        folder_txt = ""
+        if len(rel.parts) > 1:
+            folder_txt = f'<span class="folder">{html.escape("/".join(rel.parts[:-1]))}/</span>'
+        lines.append(
+            f'{indent}<li><span class="kind">{html.escape(kind)}</span>'
+            f'{folder_txt}<a href="{html.escape(href, quote=True)}">{html.escape(rel.name)}</a>'
+            f'<span class="size"><span class="num">{human_size(size)}</span></span></li>'
+        )
+    return "\n".join(lines), len(files)
+
+
 def main():
     indent = " " * 10
     everything = []
@@ -147,6 +204,10 @@ def main():
     fill(ROOT / "articles" / "index.html", "all",
          list_items(everything, lambda a: f"../{a['section']}/articles/", True, indent))
     print(f"all: {len(everything)} article(s)")
+
+    items, count = catacomb_items(indent)
+    fill(ROOT / "catacombs" / "index.html", "catacombs", items)
+    print(f"catacombs: {count} file(s)")
 
 
 if __name__ == "__main__":

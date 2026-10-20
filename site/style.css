@@ -116,10 +116,10 @@ nav a {
   color: var(--text);
   text-decoration: none;
   font-family: "Faceless", Impact, "Arial Black", sans-serif;
-  font-size: 1.35rem;
-  letter-spacing: 0.12em;
+  font-size: 1.25rem;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  padding: 1rem 1.5rem;
+  padding: 1rem 0.9rem;
   border-right: 1px solid #0d1a3a;
   transition: background 0.15s, color 0.15s, box-shadow 0.15s;
 }
@@ -330,6 +330,58 @@ section h2 a::after {
 
 .article a {
   color: var(--electric-hot);
+}
+
+/* ---------- THE CATACOMBS ---------- */
+.note {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.crypt {
+  list-style: none;
+  margin-top: 1.4rem;
+}
+
+.crypt li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem 0.9rem;
+  border-left: 3px solid var(--electric-deep);
+  padding: 0.55rem 0 0.55rem 1rem;
+  margin-top: 0.6rem;
+}
+
+.crypt li.empty {
+  display: block;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.crypt a {
+  color: var(--electric-hot);
+  word-break: break-word;
+}
+
+.crypt .folder {
+  color: var(--muted);
+}
+
+.crypt .kind {
+  font-family: Impact, "Arial Black", sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--black);
+  background: var(--electric);
+  padding: 0.1rem 0.5rem;
+}
+
+.crypt .size {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-left: auto;
 }
 
 @media (max-width: 700px) {
