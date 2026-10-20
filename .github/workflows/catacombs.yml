@@ -1,0 +1,51 @@
+# Sorts and lists the files in The Catacombs whenever something new lands there.
+#
+# Runs build.py, which moves loose files in site/catacombs/files/ into their
+# type folder (pdfs, images, documents, and so on, with "other" for the rest),
+# rebuilds the list on site/catacombs/index.html, and warns about large files.
+# Any changes are committed back to main so the repo matches the live site.
+#
+# Commits made here use the built-in GITHUB_TOKEN, which does not start other
+# workflows, so this cannot loop. The deploy workflow runs the same build.py,
+# so the live site already shows the sorted result.
+name: Sort Catacombs files
+
+on:
+  push:
+    branches: ["main"]
+    paths: ["site/catacombs/files/**"]
+  workflow_dispatch:
+
+# Needed to commit the sorted files back to the repo
+permissions:
+  contents: write
+
+# Run one at a time so two pushes don't try to commit over each other
+concurrency:
+  group: "catacombs"
+  cancel-in-progress: false
+
+jobs:
+  sort:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Sort files and build the list
+        run: python3 build.py
+
+      - name: Commit changes, if there are any
+        run: |
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "Nothing to sort. Everything is already in its place."
+            exit 0
+          fi
+          git status --short
+          git config user.name "github-actions[bot]"
+          git config user.email "41898729+github-actions[bot]@users.noreply.github.com"
+          git add -A site
+          git commit -m "Sort and list Catacombs files"
+          # Pick up anything pushed while this was running, then push
+          git pull --rebase origin main
+          git push origin HEAD:main

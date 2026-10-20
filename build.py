@@ -8,8 +8,9 @@ site/history/articles/, then writes the lists on:
   site/history/index.html     (history articles)
   site/articles/index.html    (every article, both sections)
 
-It also lists every file in site/catacombs/files/ on
-site/catacombs/index.html.
+It also sorts loose files in site/catacombs/files/ into type folders
+(pdfs, images, documents, and so on, with "other" for anything else) and
+lists every file on site/catacombs/index.html, grouped by folder.
 
 Each list sits between <!-- ARTICLES:START name --> and
 <!-- ARTICLES:END --> markers, and only that part of the page is replaced.
@@ -138,18 +139,73 @@ def fill(page, name, items_html):
 
 # ---------- THE CATACOMBS ----------
 
-KINDS = {
-    "pdf": "PDF",
-    "doc": "Doc", "docx": "Doc", "odt": "Doc", "rtf": "Doc", "txt": "Text", "md": "Text",
-    "xls": "Sheet", "xlsx": "Sheet", "ods": "Sheet", "csv": "Sheet",
-    "ppt": "Slides", "pptx": "Slides", "odp": "Slides",
-    "png": "Image", "jpg": "Image", "jpeg": "Image", "gif": "Image", "webp": "Image", "svg": "Image",
-    "mp3": "Audio", "wav": "Audio", "flac": "Audio", "ogg": "Audio",
-    "mp4": "Video", "mov": "Video", "webm": "Video",
-    "zip": "Archive", "7z": "Archive", "tar": "Archive", "gz": "Archive",
-    "otf": "Font", "ttf": "Font", "woff": "Font", "woff2": "Font",
-    "html": "Page", "htm": "Page",
-}
+CATACOMBS = ROOT / "catacombs" / "files"
+
+# Each folder in site/catacombs/files/, in the order it shows on the page,
+# with its heading and the file extensions that belong in it.
+# Anything that matches none of these goes in "other".
+FOLDERS = [
+    ("pdfs", "PDFs", {"pdf"}),
+    ("images", "Images", {"png", "jpg", "jpeg", "gif", "webp", "svg", "bmp", "tif", "tiff", "heic", "ico"}),
+    ("documents", "Documents", {"doc", "docx", "odt", "rtf", "pages", "epub"}),
+    ("text", "Text Files", {"txt", "md", "markdown", "rst", "log", "tex"}),
+    ("spreadsheets", "Spreadsheets", {"xls", "xlsx", "ods", "csv", "tsv", "numbers"}),
+    ("slides", "Slides", {"ppt", "pptx", "odp", "key"}),
+    ("audio", "Audio", {"mp3", "wav", "flac", "ogg", "m4a", "aac", "aiff", "mid", "midi"}),
+    ("video", "Video", {"mp4", "mov", "webm", "mkv", "avi", "m4v"}),
+    ("archives", "Archives", {"zip", "7z", "tar", "gz", "tgz", "rar", "bz2", "xz"}),
+    ("fonts", "Fonts", {"otf", "ttf", "woff", "woff2"}),
+    ("other", "Other Stuff", set()),
+]
+FOLDER_NAMES = {name: title for name, title, _ in FOLDERS}
+
+# GitHub warns about files over 50 MB and refuses files over 100 MB
+SIZE_WARNING = 50 * 1024 * 1024
+
+
+def folder_for(path):
+    ext = path.suffix.lower().lstrip(".")
+    for name, _, exts in FOLDERS:
+        if ext in exts:
+            return name
+    return "other"
+
+
+def is_hidden(rel):
+    """Hidden files, drafts, and folder placeholders start with . or _"""
+    return any(part.startswith((".", "_")) for part in rel.parts)
+
+
+def sort_catacombs():
+    """Move loose files sitting directly in catacombs/files/ into their type folder.
+
+    Files already inside a folder are left alone, so anything placed by hand
+    stays where it was put. Returns the number of files moved.
+    """
+    if not CATACOMBS.is_dir():
+        return 0
+
+    for name, _, _ in FOLDERS:
+        (CATACOMBS / name).mkdir(exist_ok=True)
+        keep = CATACOMBS / name / ".gitkeep"
+        if not keep.exists():
+            keep.touch()
+
+    moved = 0
+    for p in sorted(CATACOMBS.iterdir()):
+        if not p.is_file() or is_hidden(Path(p.name)):
+            continue
+        dest_dir = CATACOMBS / folder_for(p)
+        dest = dest_dir / p.name
+        # Never overwrite: add -1, -2, and so on if the name is taken
+        n = 1
+        while dest.exists():
+            dest = dest_dir / f"{p.stem}-{n}{p.suffix}"
+            n += 1
+        p.rename(dest)
+        print(f"sorted: {p.name} -> {dest.relative_to(CATACOMBS)}")
+        moved += 1
+    return moved
 
 
 def human_size(n):
@@ -160,37 +216,53 @@ def human_size(n):
 
 
 def catacomb_items(indent):
-    folder = ROOT / "catacombs" / "files"
-    files = []
-    if folder.is_dir():
-        for p in folder.rglob("*"):
-            rel = p.relative_to(folder)
-            # Skip folders, hidden files, and drafts (anything starting with . or _)
-            if not p.is_file() or any(part.startswith((".", "_")) for part in rel.parts):
+    groups = {}
+    if CATACOMBS.is_dir():
+        for p in CATACOMBS.rglob("*"):
+            rel = p.relative_to(CATACOMBS)
+            if not p.is_file() or is_hidden(rel):
                 continue
-            files.append((rel, p.stat().st_size))
+            size = p.stat().st_size
+            if size > SIZE_WARNING:
+                print(f"warning: {rel} is {human_size(size)}. GitHub refuses files over 100 MB.")
+            # Loose files at the top level are listed under Other Stuff
+            top = rel.parts[0] if len(rel.parts) > 1 else "other"
+            groups.setdefault(top, []).append((rel, size))
 
-    if not files:
-        return f'{indent}<li class="empty">Nothing buried here yet.</li>', 0
+    total = sum(len(v) for v in groups.values())
+    if not total:
+        return f'{indent}<p class="empty">Nothing buried here yet.</p>', 0
 
-    files.sort(key=lambda f: [part.lower() for part in f[0].parts])
+    # Known folders first in their set order, then any custom folders A to Z
+    order = [name for name, _, _ in FOLDERS if name in groups]
+    order += sorted((g for g in groups if g not in FOLDER_NAMES), key=str.lower)
+
     lines = []
-    for rel, size in files:
-        href = "files/" + "/".join(urllib.parse.quote(part) for part in rel.parts)
-        kind = KINDS.get(rel.suffix.lower().lstrip("."), rel.suffix.lstrip(".").upper() or "File")
-        folder_txt = ""
-        if len(rel.parts) > 1:
-            folder_txt = f'<span class="folder">{html.escape("/".join(rel.parts[:-1]))}/</span>'
-        lines.append(
-            f'{indent}<li><span class="kind">{html.escape(kind)}</span>'
-            f'{folder_txt}<a href="{html.escape(href, quote=True)}">{html.escape(rel.name)}</a>'
-            f'<span class="size"><span class="num">{human_size(size)}</span></span></li>'
-        )
-    return "\n".join(lines), len(files)
+    for group in order:
+        files = sorted(groups[group], key=lambda f: [part.lower() for part in f[0].parts])
+        title = FOLDER_NAMES.get(group, group.replace("-", " ").replace("_", " ").title())
+        lines.append(f'{indent}<h3>{html.escape(title)} <span class="count num">{len(files)}</span></h3>')
+        lines.append(f'{indent}<ul>')
+        for rel, size in files:
+            href = "files/" + "/".join(urllib.parse.quote(part) for part in rel.parts)
+            ext = rel.suffix.lstrip(".").upper() or "FILE"
+            # Show any folders below the type folder, such as images/rome/
+            inner = rel.parts[1:-1] if len(rel.parts) > 1 else ()
+            folder_txt = f'<span class="folder">{html.escape("/".join(inner))}/</span>' if inner else ""
+            lines.append(
+                f'{indent}  <li><span class="kind">{html.escape(ext)}</span>'
+                f'{folder_txt}<a href="{html.escape(href, quote=True)}">{html.escape(rel.name)}</a>'
+                f'<span class="size"><span class="num">{human_size(size)}</span></span></li>'
+            )
+        lines.append(f'{indent}</ul>')
+    return "\n".join(lines), total
 
 
 def main():
     indent = " " * 10
+
+    moved = sort_catacombs()
+    print(f"catacombs: sorted {moved} loose file(s)")
     everything = []
 
     for section in SECTIONS:
