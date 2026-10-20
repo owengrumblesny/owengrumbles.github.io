@@ -1,0 +1,295 @@
+@font-face {
+  font-family: "Faceless";
+  src: url("fonts/Faceless.otf") format("opentype");
+  font-display: swap;
+}
+
+:root {
+  --black: #000000;
+  --void: #03050b;
+  --electric: #1f5bff;
+  --electric-hot: #3d8bff;
+  --electric-deep: #0a2aa6;
+  --cyan: #00aaff;
+  --white: #00aaff;
+  --text: #00aaff;
+  --muted: #56688f;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Arial Narrow", Arial, Helvetica, sans-serif;
+  font-size: 1.1rem;
+  line-height: 1.65;
+  color: var(--text);
+  background: var(--black);
+  min-height: 100vh;
+}
+
+/* ---------- HERO ---------- */
+.hero {
+  position: relative;
+  height: 420px;
+  background-image: url("images/banner.jpg");
+  background-size: cover;
+  background-position: center 35%;
+  clip-path: polygon(0 0, 100% 0, 100% 78%, 0 100%);
+  border-bottom: 3px solid var(--electric);
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.85));
+}
+
+/* ---------- LAYOUT ---------- */
+.wrap {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.masthead {
+  display: flex;
+  align-items: flex-end;
+  gap: 1.8rem;
+  margin-top: -110px;
+  position: relative;
+  z-index: 2;
+  padding-bottom: 1.6rem;
+  flex-wrap: wrap;
+}
+
+.logo {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+  background: var(--black);
+  border: 2px solid var(--electric);
+  border-radius: 50%;
+  padding: 10px;
+  box-shadow: 0 0 28px rgba(31, 91, 255, 0.7), 0 0 70px rgba(31, 91, 255, 0.25);
+  flex-shrink: 0;
+}
+
+.title h1 {
+  font-family: "Faceless", Impact, "Arial Black", sans-serif;
+  font-weight: normal;
+  font-size: 6rem;
+  line-height: 0.95;
+  color: var(--white);
+  text-shadow: 0 0 6px var(--electric-hot), 0 0 26px var(--electric), 0 0 60px var(--electric-deep);
+}
+
+.title p {
+  font-family: "Faceless", Impact, "Arial Black", sans-serif;
+  font-size: 1.2rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  margin-top: 0.8rem;
+}
+
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  background: var(--void);
+  border-top: 3px solid var(--electric);
+  border-bottom: 3px solid var(--electric);
+  margin-bottom: 3rem;
+}
+
+nav a {
+  flex: 1 1 auto;
+  text-align: center;
+  color: var(--text);
+  text-decoration: none;
+  font-family: "Faceless", Impact, "Arial Black", sans-serif;
+  font-size: 1.35rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 1rem 1.5rem;
+  border-right: 1px solid #0d1a3a;
+  transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+}
+
+nav a:last-child {
+  border-right: none;
+}
+
+nav a:hover {
+  background: var(--electric);
+  color: var(--black);
+  box-shadow: 0 0 30px var(--electric);
+}
+
+/* ---------- CONTENT ---------- */
+.content {
+  display: grid;
+  gap: 2.6rem;
+  padding-bottom: 3.5rem;
+}
+
+section {
+  position: relative;
+  background: var(--void);
+  border-left: 6px solid var(--electric);
+  padding: 2.2rem 2.6rem;
+  box-shadow: inset 0 0 80px rgba(31, 91, 255, 0.08), 0 0 40px rgba(31, 91, 255, 0.12);
+}
+
+section h2 {
+  font-family: "Faceless", Impact, "Arial Black", sans-serif;
+  font-weight: normal;
+  font-size: 3.6rem;
+  line-height: 1;
+  color: var(--white);
+  text-shadow: 0 0 10px var(--electric), 0 0 2px var(--electric-hot);
+  margin-bottom: 1rem;
+}
+
+section p + p {
+  margin-top: 0.9rem;
+}
+
+section a {
+  color: var(--electric-hot);
+  text-decoration-color: var(--electric-deep);
+}
+
+section a:hover {
+  color: var(--cyan);
+}
+
+.license h3 {
+  font-family: "Faceless", Impact, "Arial Black", sans-serif;
+  font-weight: normal;
+  font-size: 1.2rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  margin-top: 1.6rem;
+  margin-bottom: 0.3rem;
+}
+
+.license ul {
+  list-style: none;
+  margin-top: 0.4rem;
+}
+
+.license li {
+  border-left: 3px solid var(--electric-deep);
+  padding-left: 1rem;
+}
+
+/* The Faceless font has no glyph for some digits, so numbers use a plain font */
+.num {
+  font-family: Impact, "Arial Black", sans-serif;
+  letter-spacing: 0.05em;
+}
+
+/* ---------- FOOTER ---------- */
+footer {
+  background: var(--black);
+  color: #00aaff;
+  border-top: 3px solid var(--electric);
+  font-family: "Faceless", Impact, "Arial Black", sans-serif;
+  font-size: 1rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 1.6rem 1rem;
+  clip-path: polygon(0 12%, 100% 0, 100% 100%, 0 100%);
+  margin-top: 2rem;
+}
+
+/* ---------- SECTION HEADING LINKS ---------- */
+section h2 a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.15s, text-shadow 0.15s;
+}
+
+section h2 a:hover {
+  color: var(--electric-hot);
+  text-shadow: 0 0 14px var(--electric), 0 0 30px var(--electric);
+}
+
+section h2 a::after {
+  content: " \2192";
+  font-size: 0.5em;
+  vertical-align: middle;
+}
+
+/* ---------- ARTICLE LISTS ---------- */
+.articles {
+  list-style: none;
+  margin-top: 1.2rem;
+}
+
+.articles li {
+  border-left: 3px solid var(--electric-deep);
+  padding: 0.6rem 0 0.6rem 1rem;
+  margin-top: 0.8rem;
+}
+
+.articles li a {
+  font-family: "Faceless", Impact, "Arial Black", sans-serif;
+  font-size: 1.5rem;
+  text-decoration: none;
+}
+
+.articles .date {
+  display: block;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.empty {
+  color: var(--muted);
+  font-style: italic;
+}
+
+.back {
+  display: inline-block;
+  margin-bottom: 1.5rem;
+  color: var(--electric-hot);
+}
+
+@media (max-width: 700px) {
+  .hero {
+    height: 300px;
+  }
+  .masthead {
+    margin-top: -70px;
+    gap: 1rem;
+  }
+  .logo {
+    width: 110px;
+    height: 110px;
+  }
+  .title h1 {
+    font-size: 4.2rem;
+  }
+  nav a {
+    font-size: 1.05rem;
+    padding: 0.9rem 0.8rem;
+  }
+  section {
+    padding: 1.5rem 1.4rem;
+  }
+  section h2 {
+    font-size: 2.8rem;
+  }
+}
