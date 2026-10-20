@@ -12,6 +12,9 @@ It also sorts loose files in site/catacombs/files/ into type folders
 (pdfs, images, documents, and so on, with "other" for anything else) and
 lists every file on site/catacombs/index.html, grouped by folder.
 
+Last, it builds the plain version of the whole site in site/plain/
+(see plain.py).
+
 Each list sits between <!-- ARTICLES:START name --> and
 <!-- ARTICLES:END --> markers, and only that part of the page is replaced.
 
@@ -31,6 +34,8 @@ import html
 import re
 import urllib.parse
 from pathlib import Path
+
+from plain import build_plain
 
 ROOT = Path(__file__).resolve().parent / "site"
 
@@ -215,7 +220,11 @@ def human_size(n):
         n /= 1024
 
 
-def catacomb_items(indent):
+def catacomb_groups():
+    """Every Catacombs file, grouped by folder in display order.
+
+    Returns a list of (folder, heading, [(path inside files/, size), ...]).
+    """
     groups = {}
     if CATACOMBS.is_dir():
         for p in CATACOMBS.rglob("*"):
@@ -229,18 +238,24 @@ def catacomb_items(indent):
             top = rel.parts[0] if len(rel.parts) > 1 else "other"
             groups.setdefault(top, []).append((rel, size))
 
-    total = sum(len(v) for v in groups.values())
-    if not total:
-        return f'{indent}<p class="empty">Nothing buried here yet.</p>', 0
-
     # Known folders first in their set order, then any custom folders A to Z
     order = [name for name, _, _ in FOLDERS if name in groups]
     order += sorted((g for g in groups if g not in FOLDER_NAMES), key=str.lower)
+    return [
+        (g,
+         FOLDER_NAMES.get(g, g.replace("-", " ").replace("_", " ").title()),
+         sorted(groups[g], key=lambda f: [part.lower() for part in f[0].parts]))
+        for g in order
+    ]
+
+
+def catacomb_items(groups, indent):
+    total = sum(len(files) for _, _, files in groups)
+    if not total:
+        return f'{indent}<p class="empty">Nothing buried here yet.</p>', 0
 
     lines = []
-    for group in order:
-        files = sorted(groups[group], key=lambda f: [part.lower() for part in f[0].parts])
-        title = FOLDER_NAMES.get(group, group.replace("-", " ").replace("_", " ").title())
+    for group, title, files in groups:
         lines.append(f'{indent}<h3>{html.escape(title)} <span class="count num">{len(files)}</span></h3>')
         lines.append(f'{indent}<ul>')
         for rel, size in files:
@@ -264,9 +279,11 @@ def main():
     moved = sort_catacombs()
     print(f"catacombs: sorted {moved} loose file(s)")
     everything = []
+    by_section = {}
 
     for section in SECTIONS:
         articles = collect(section)
+        by_section[section] = articles
         everything.extend(articles)
         fill(ROOT / section / "index.html", section,
              list_items(articles, lambda a: "articles/", False, indent))
@@ -277,9 +294,14 @@ def main():
          list_items(everything, lambda a: f"../{a['section']}/articles/", True, indent))
     print(f"all: {len(everything)} article(s)")
 
-    items, count = catacomb_items(indent)
+    groups = catacomb_groups()
+    items, count = catacomb_items(groups, indent)
     fill(ROOT / "catacombs" / "index.html", "catacombs", items)
     print(f"catacombs: {count} file(s)")
+
+    # The plain version is built last, from the finished main-site pages
+    n_articles, n_files = build_plain(ROOT, SECTIONS, by_section, groups, human_size)
+    print(f"plain: {n_articles} article(s), {n_files} file(s)")
 
 
 if __name__ == "__main__":

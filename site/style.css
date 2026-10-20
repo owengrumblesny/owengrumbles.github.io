@@ -200,6 +200,10 @@ section a:hover {
 }
 
 /* ---------- FOOTER ---------- */
+footer a {
+  color: inherit;
+}
+
 footer {
   background: var(--black);
   color: #00aaff;
