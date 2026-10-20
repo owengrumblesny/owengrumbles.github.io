@@ -200,10 +200,6 @@ section a:hover {
 }
 
 /* ---------- FOOTER ---------- */
-footer a {
-  color: inherit;
-}
-
 footer {
   background: var(--black);
   color: #00aaff;
@@ -337,6 +333,10 @@ section h2 a::after {
 }
 
 /* ---------- THE CATACOMBS ---------- */
+.plain-link {
+  float: right;
+}
+
 .note {
   color: var(--muted);
   font-size: 0.95rem;

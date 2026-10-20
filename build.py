@@ -12,8 +12,8 @@ It also sorts loose files in site/catacombs/files/ into type folders
 (pdfs, images, documents, and so on, with "other" for anything else) and
 lists every file on site/catacombs/index.html, grouped by folder.
 
-Last, it builds the plain version of the whole site in site/plain/
-(see plain.py).
+Last, it builds the plain version of the Catacombs: site/catacombs/plain.html
+and site/catacombs/files.json (see plain.py).
 
 Each list sits between <!-- ARTICLES:START name --> and
 <!-- ARTICLES:END --> markers, and only that part of the page is replaced.
@@ -279,11 +279,9 @@ def main():
     moved = sort_catacombs()
     print(f"catacombs: sorted {moved} loose file(s)")
     everything = []
-    by_section = {}
 
     for section in SECTIONS:
         articles = collect(section)
-        by_section[section] = articles
         everything.extend(articles)
         fill(ROOT / section / "index.html", section,
              list_items(articles, lambda a: "articles/", False, indent))
@@ -299,9 +297,8 @@ def main():
     fill(ROOT / "catacombs" / "index.html", "catacombs", items)
     print(f"catacombs: {count} file(s)")
 
-    # The plain version is built last, from the finished main-site pages
-    n_articles, n_files = build_plain(ROOT, SECTIONS, by_section, groups, human_size)
-    print(f"plain: {n_articles} article(s), {n_files} file(s)")
+    build_plain(ROOT, groups, human_size)
+    print("catacombs: plain version and files.json built")
 
 
 if __name__ == "__main__":
