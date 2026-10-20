@@ -1,0 +1,51 @@
+# Creates a GitHub Release for every push to main that changes the site.
+# Version scheme (CalVer): vYYYY.MM.DD.N, where N counts releases made that day (starting at 1).
+name: Release site
+
+on:
+  push:
+    branches: ["main"]
+    paths: ["site/**"]
+  workflow_dispatch:
+
+# Needed to create tags and releases
+permissions:
+  contents: write
+
+# Run releases one at a time so two pushes don't pick the same version number
+concurrency:
+  group: "release"
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (with full history and tags)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Compute next version
+        id: ver
+        run: |
+          base="v$(date -u +%Y.%m.%d)"
+          count=$(git tag -l "${base}.*" | wc -l)
+          tag="${base}.$((count + 1))"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "Next release: $tag"
+
+      - name: Package site folder
+        env:
+          TAG: ${{ steps.ver.outputs.tag }}
+        run: tar -czf "site-${TAG}.tar.gz" -C site .
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.ver.outputs.tag }}
+        run: |
+          gh release create "$TAG" "site-${TAG}.tar.gz" \
+            --target "$GITHUB_SHA" \
+            --title "Site $TAG" \
+            --generate-notes
