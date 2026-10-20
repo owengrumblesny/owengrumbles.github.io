@@ -32,6 +32,7 @@ Files whose names start with an underscore are treated as drafts and skipped.
 import datetime
 import html
 import re
+import shutil
 import urllib.parse
 from pathlib import Path
 
@@ -249,28 +250,104 @@ def catacomb_groups():
     ]
 
 
-def catacomb_items(groups, indent):
+def file_li(rel, size, href_prefix, indent):
+    """One <li> for a file: type tag, any inner folder, name, and size."""
+    href = href_prefix + "/".join(urllib.parse.quote(part) for part in rel.parts)
+    ext = rel.suffix.lstrip(".").upper() or "FILE"
+    inner = rel.parts[1:-1] if len(rel.parts) > 1 else ()
+    folder_txt = f'<span class="folder">{html.escape("/".join(inner))}/</span>' if inner else ""
+    return (f'{indent}<li><span class="kind">{html.escape(ext)}</span>'
+            f'{folder_txt}<a href="{html.escape(href, quote=True)}">{html.escape(rel.name)}</a>'
+            f'<span class="size"><span class="num">{human_size(size)}</span></span></li>')
+
+
+def catacomb_index(groups, indent):
+    """The main Catacombs page: one link per category, each to its own page."""
     total = sum(len(files) for _, _, files in groups)
     if not total:
         return f'{indent}<p class="empty">Nothing buried here yet.</p>', 0
-
-    lines = []
+    lines = [f'{indent}<ul class="crypt-index">']
     for group, title, files in groups:
-        lines.append(f'{indent}<h3>{html.escape(title)} <span class="count num">{len(files)}</span></h3>')
-        lines.append(f'{indent}<ul>')
-        for rel, size in files:
-            href = "files/" + "/".join(urllib.parse.quote(part) for part in rel.parts)
-            ext = rel.suffix.lstrip(".").upper() or "FILE"
-            # Show any folders below the type folder, such as images/rome/
-            inner = rel.parts[1:-1] if len(rel.parts) > 1 else ()
-            folder_txt = f'<span class="folder">{html.escape("/".join(inner))}/</span>' if inner else ""
-            lines.append(
-                f'{indent}  <li><span class="kind">{html.escape(ext)}</span>'
-                f'{folder_txt}<a href="{html.escape(href, quote=True)}">{html.escape(rel.name)}</a>'
-                f'<span class="size"><span class="num">{human_size(size)}</span></span></li>'
-            )
-        lines.append(f'{indent}</ul>')
+        href = urllib.parse.quote(group) + "/"
+        lines.append(f'{indent}  <li><a href="{href}">{html.escape(title)}</a>'
+                     f'<span class="count num">{len(files)}</span></li>')
+    lines.append(f'{indent}</ul>')
     return "\n".join(lines), total
+
+
+# Marker so the build can find and refresh only the pages it generated
+CAT_MARKER = "<!-- auto-generated Catacombs category page -->"
+
+_SUBPAGE = CAT_MARKER.join((
+    "<!DOCTYPE html>\n",
+    "\n<html lang=\"en\">\n"
+    "<head>\n"
+    "  <meta charset=\"UTF-8\">\n"
+    "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n"
+    "  <title>{title_upper} | THE CATACOMBS | OWEN GRUMBLES</title>\n"
+    "  <meta name=\"license\" content=\"Code: GPL-3.0. Writings: CC BY 4.0. Graphics and assets: All rights reserved.\">\n"
+    "  <link rel=\"stylesheet\" href=\"../../style.css\">\n"
+    "</head>\n"
+    "<body>\n\n"
+    "  <div class=\"hero\" role=\"img\" aria-label=\"Banner\"></div>\n\n"
+    "  <div class=\"wrap\">\n\n"
+    "    <header class=\"masthead\">\n"
+    "      <img class=\"logo\" src=\"../../images/logo.png\" alt=\"Logo: Skeletal Wail with a Wooden Cross\">\n"
+    "      <div class=\"title\">\n"
+    "        <h1>Owen Grumbles</h1>\n"
+    "      </div>\n"
+    "    </header>\n\n"
+    "    <nav>\n"
+    "      <a href=\"../../philosophy/\">Philosophy</a>\n"
+    "      <a href=\"../../history/\">History</a>\n"
+    "      <a href=\"../../articles/\">All Articles</a>\n"
+    "      <a href=\"../../catacombs/\">Catacombs</a>\n"
+    "      <a href=\"../../#contact\">Contact</a>\n"
+    "      <a href=\"../../#license\">License</a>\n"
+    "    </nav>\n\n"
+    "    <main class=\"content\">\n"
+    "      <section id=\"catacombs\">\n"
+    "        <a class=\"back\" href=\"../\">&larr; The Catacombs</a>\n"
+    "        <h2>{title}</h2>\n"
+    "        <div class=\"crypt\">\n"
+    "{body}\n"
+    "        </div>\n"
+    "      </section>\n"
+    "    </main>\n\n"
+    "  </div>\n\n"
+    "  <footer>\n"
+    "    &copy; <span class=\"num\">2026</span> Owen Grumbles &bull; Code GPL-<span class=\"num\">3.0</span> &bull; Writings CC BY <span class=\"num\">4.0</span> &bull; Assets All Rights Reserved\n"
+    "  </footer>\n\n"
+    "</body>\n"
+    "</html>\n",
+))
+
+
+def catacombs_subpage(title, body):
+    return _SUBPAGE.format(title=html.escape(title), title_upper=html.escape(title.upper()), body=body)
+
+
+def build_catacomb_pages(groups):
+    """Write catacombs/<category>/index.html for each category that has files,
+    and delete auto-generated pages for categories that no longer do."""
+    cat_root = ROOT / "catacombs"
+    current = {g for g, _, _ in groups}
+
+    for d in sorted(cat_root.iterdir()):
+        if d.is_dir() and d.name != "files":
+            idx = d / "index.html"
+            if idx.exists() and CAT_MARKER in idx.read_text(encoding="utf-8") and d.name not in current:
+                shutil.rmtree(d)
+
+    indent = " " * 10
+    for group, title, files in groups:
+        d = cat_root / group
+        d.mkdir(exist_ok=True)
+        lines = [f'{indent}<ul>']
+        lines += [file_li(rel, size, "../files/", indent + "  ") for rel, size in files]
+        lines.append(f'{indent}</ul>')
+        (d / "index.html").write_text(catacombs_subpage(title, "\n".join(lines)), encoding="utf-8")
+    return len(groups)
 
 
 def main():
@@ -293,9 +370,10 @@ def main():
     print(f"all: {len(everything)} article(s)")
 
     groups = catacomb_groups()
-    items, count = catacomb_items(groups, indent)
-    fill(ROOT / "catacombs" / "index.html", "catacombs", items)
-    print(f"catacombs: {count} file(s)")
+    index_html, count = catacomb_index(groups, indent)
+    fill(ROOT / "catacombs" / "index.html", "catacombs", index_html)
+    pages = build_catacomb_pages(groups)
+    print(f"catacombs: {count} file(s) across {pages} categor(ies)")
 
     build_plain(ROOT, groups, human_size)
     print("catacombs: plain version and files.json built")

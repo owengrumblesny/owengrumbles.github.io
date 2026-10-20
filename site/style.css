@@ -346,6 +346,35 @@ section h2 a::after {
   margin-top: 1.4rem;
 }
 
+.crypt-index {
+  list-style: none;
+  margin-top: 1.4rem;
+}
+
+.crypt-index li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.9rem;
+  border-left: 3px solid var(--electric-deep);
+  padding: 0.7rem 0 0.7rem 1rem;
+  margin-top: 0.6rem;
+}
+
+.crypt-index a {
+  font-family: "Faceless", Impact, "Arial Black", sans-serif;
+  font-size: 1.7rem;
+  color: var(--electric-hot);
+}
+
+.crypt-index a:hover {
+  color: var(--cyan);
+}
+
+.crypt-index .count {
+  color: var(--muted);
+  margin-left: auto;
+}
+
 .crypt h3 {
   font-family: "Faceless", Impact, "Arial Black", sans-serif;
   font-weight: normal;

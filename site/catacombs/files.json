@@ -1,22 +1,5 @@
 {
   "site": "https://owengrumblesny.github.io/",
-  "count": 2,
-  "files": [
-    {
-      "folder": "text",
-      "path": "text/boom.command",
-      "name": "boom.command",
-      "type": "COMMAND",
-      "size_bytes": 134,
-      "url": "https://owengrumblesny.github.io/catacombs/files/text/boom.command"
-    },
-    {
-      "folder": "text",
-      "path": "text/boom.sh",
-      "name": "boom.sh",
-      "type": "SH",
-      "size_bytes": 191,
-      "url": "https://owengrumblesny.github.io/catacombs/files/text/boom.sh"
-    }
-  ]
+  "count": 0,
+  "files": []
 }
