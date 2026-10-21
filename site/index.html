@@ -23,7 +23,10 @@
   <section class="hero">
     <h1>Owen Grumbles</h1>
     <p class="tagline">Philosophy &amp; History</p>
-    <p class="verse">A short line of welcome or a favorite quotation goes here &mdash; something that sets the tone for the work.</p>
+    <blockquote class="hero-quote" id="heroQuote">
+      <p class="quote-text">&ldquo;If it seems more horrible to kill a man in his own house than in a field, &hellip; it ought surely to be deemed more atrocious to destroy a fetus in the womb before it has come to light.&rdquo;</p>
+      <cite class="quote-cite">&mdash; John Calvin</cite>
+    </blockquote>
     <a class="btn" href="writing.html">Read the writing</a>
   </section>
 
@@ -44,6 +47,43 @@
     &copy; 2026 Owen Grumbles &middot; Writing licensed under
     <a href="https://creativecommons.org/licenses/by/4.0/">CC&nbsp;BY&nbsp;4.0</a>
   </footer>
+
+  <script>
+    // Quotes shown in the banner. Add more objects to make them cycle.
+    // Keep the first one matching the quote written into the page above,
+    // so it still shows if JavaScript is off.
+    const heroQuotes = [
+      {
+        text: "If it seems more horrible to kill a man in his own house than in a field, … it ought surely to be deemed more atrocious to destroy a fetus in the womb before it has come to light.",
+        cite: "John Calvin"
+      }
+      // ,{ text: "Another quote here.", cite: "Author Name" }
+    ];
+
+    (function () {
+      var box = document.getElementById("heroQuote");
+      if (!box || heroQuotes.length < 2) return;   // nothing to cycle
+      var textEl = box.querySelector(".quote-text");
+      var citeEl = box.querySelector(".quote-cite");
+      var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      var i = 0;
+
+      function show(q) {
+        textEl.innerHTML = "“" + q.text + "”";
+        citeEl.innerHTML = "— " + q.cite;
+      }
+
+      setInterval(function () {
+        i = (i + 1) % heroQuotes.length;
+        if (reduce) { show(heroQuotes[i]); return; }
+        box.classList.add("is-fading");
+        setTimeout(function () {
+          show(heroQuotes[i]);
+          box.classList.remove("is-fading");
+        }, 500);
+      }, 8000);
+    })();
+  </script>
 
 </body>
 </html>
