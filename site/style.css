@@ -1,17 +1,64 @@
-/* Dracula palette (https://draculatheme.com) */
+/* Two themes: Dracula (default) and Alucard, its light counterpart. */
+/* https://draculatheme.com */
 :root {
-  --bg: #282a36;           /* background */
-  --ink: #f8f8f2;          /* foreground */
-  --muted: #6272a4;        /* comment */
-  --rule: #44475a;         /* current line */
-  --accent: #bd93f9;       /* purple */
-  --accent-hover: #ff79c6; /* pink */
+  /* content */
+  --bg: #282a36;
+  --ink: #f8f8f2;
+  --muted: #6272a4;
+  --rule: #44475a;
+  --accent: #bd93f9;
+  --accent-hover: #ff79c6;
   --card: #343746;
-  /* Dark bands for the bar, hero, and footer */
+  /* bands (top bar, footer) */
   --band: #21222c;
   --band-ink: #f8f8f2;
   --band-muted: #6272a4;
   --band-rule: rgba(248, 248, 242, 0.12);
+  /* banners (hero, page header) */
+  --hero-bg:
+    radial-gradient(1000px 380px at 75% -20%, rgba(189, 147, 249, 0.30), transparent 60%),
+    radial-gradient(760px 300px at 12% 120%, rgba(255, 121, 198, 0.16), transparent 60%),
+    linear-gradient(135deg, #282a36 0%, #343746 55%, #44475a 100%);
+  --pagehead-bg:
+    radial-gradient(900px 300px at 80% -40%, rgba(189, 147, 249, 0.26), transparent 60%),
+    linear-gradient(135deg, #282a36 0%, #343746 100%);
+  --banner-ink: #f8f8f2;
+  --banner-sub: #e6e6f0;
+  --banner-cite: #bd93f9;
+  /* button */
+  --btn-bg: #bd93f9;
+  --btn-ink: #282a36;
+  --btn-border: #bd93f9;
+  --btn-hover-ink: #f8f8f2;
+}
+
+/* Alucard — the light Dracula theme (https://draculatheme.com) */
+:root[data-theme="alucard"] {
+  --bg: #fffbeb;
+  --ink: #1f1f1f;
+  --muted: #6c664b;
+  --rule: #cfcfde;
+  --accent: #644ac9;
+  --accent-hover: #a3144d;
+  --card: #ffffff;
+  --band: #f3efdd;
+  --band-ink: #1f1f1f;
+  --band-muted: #6c664b;
+  --band-rule: rgba(31, 31, 31, 0.14);
+  --hero-bg:
+    radial-gradient(1000px 380px at 75% -20%, rgba(100, 74, 201, 0.18), transparent 60%),
+    radial-gradient(760px 300px at 12% 120%, rgba(163, 20, 77, 0.10), transparent 60%),
+    linear-gradient(135deg, #fffbeb 0%, #f1eeda 55%, #e6e2cf 100%);
+  --pagehead-bg:
+    radial-gradient(900px 300px at 80% -40%, rgba(100, 74, 201, 0.16), transparent 60%),
+    linear-gradient(135deg, #fffbeb 0%, #efecd9 100%);
+  --banner-ink: #1f1f1f;
+  --banner-sub: #4a4636;
+  --banner-cite: #644ac9;
+  --btn-bg: #644ac9;
+  --btn-ink: #fffbeb;
+  --btn-border: #644ac9;
+  --btn-hover-ink: #1f1f1f;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -73,13 +120,26 @@ body {
 .topnav a:hover { color: var(--band-ink); border-bottom-color: var(--accent); }
 .topnav a.current { color: var(--band-ink); border-bottom-color: var(--accent); }
 
+.theme-toggle {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--band-muted);
+  background: transparent;
+  border: 1px solid var(--band-rule);
+  border-radius: 999px;
+  padding: 0.3rem 0.8rem;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.theme-toggle:hover { color: var(--band-ink); border-color: var(--accent); }
+
 /* ---------- HERO (home) ---------- */
 .hero {
-  background:
-    radial-gradient(1000px 380px at 75% -20%, rgba(189, 147, 249, 0.30), transparent 60%),
-    radial-gradient(760px 300px at 12% 120%, rgba(255, 121, 198, 0.16), transparent 60%),
-    linear-gradient(135deg, #282a36 0%, #343746 55%, #44475a 100%);
-  color: var(--band-ink);
+  background: var(--hero-bg);
+  color: var(--banner-ink);
   text-align: center;
   padding: 5.5rem 1.5rem 5rem;
 }
@@ -91,13 +151,13 @@ body {
   letter-spacing: -0.01em;
 }
 
-.hero .tagline { font-size: 1.15rem; color: #f8f8f2; margin-top: 0.8rem; }
+.hero .tagline { font-size: 1.15rem; color: var(--banner-sub); margin-top: 0.8rem; }
 
 .hero .verse {
   max-width: 34rem;
   margin: 1.4rem auto 0;
   font-style: italic;
-  color: #f8f8f2;
+  color: var(--banner-sub);
 }
 
 .hero-quote {
@@ -112,7 +172,7 @@ body {
   font-style: italic;
   font-size: 1.1rem;
   line-height: 1.6;
-  color: #f8f8f2;
+  color: var(--banner-sub);
 }
 
 .hero-quote .quote-cite {
@@ -123,7 +183,7 @@ body {
   font-size: 0.78rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #bd93f9;
+  color: var(--banner-cite);
 }
 
 .btn {
@@ -136,26 +196,24 @@ body {
   text-decoration: none;
   padding: 0.75rem 1.6rem;
   border-radius: 2px;
-  background: #bd93f9;
-  color: #282a36;
-  border: 1px solid #bd93f9;
+  background: var(--btn-bg);
+  color: var(--btn-ink);
+  border: 1px solid var(--btn-border);
   transition: background 0.15s, color 0.15s;
 }
 
-.btn:hover { background: transparent; color: #f8f8f2; }
+.btn:hover { background: transparent; color: var(--btn-hover-ink); }
 
 /* ---------- PAGE HEADER (subpages) ---------- */
 .page-header {
-  background:
-    radial-gradient(900px 300px at 80% -40%, rgba(189, 147, 249, 0.26), transparent 60%),
-    linear-gradient(135deg, #282a36 0%, #343746 100%);
-  color: var(--band-ink);
+  background: var(--pagehead-bg);
+  color: var(--banner-ink);
   padding: 3rem 1.5rem;
 }
 
 .page-header .inner { max-width: 44rem; margin: 0 auto; }
 .page-header h1 { font-size: 2.2rem; font-weight: 600; }
-.page-header p { color: #e9e9f3; margin-top: 0.35rem; }
+.page-header p { color: var(--banner-sub); margin-top: 0.35rem; }
 
 /* ---------- CONTENT ---------- */
 main { flex: 1; max-width: 44rem; margin: 0 auto; width: 100%; padding: 0 1.5rem; }
