@@ -7,33 +7,34 @@
   <meta name="description" content="Owen Grumbles — writing on philosophy and history.">
   <meta name="license" content="Code: GPL-3.0. Writings: CC BY 4.0. Graphics and assets: All rights reserved.">
   <style>
+    /* Nord palette (https://www.nordtheme.com) */
     :root {
-      --bg: #fcfbf8;
-      --ink: #1b1b1a;
-      --muted: #6a6862;
-      --rule: #e4e1d9;
-      --accent: #3a5570;
-      --accent-hover: #24364a;
+      --bg: #eceff4;        /* snow storm nord6 */
+      --ink: #2e3440;       /* polar night nord0 */
+      --muted: #4c566a;     /* polar night nord3 */
+      --rule: #d8dee9;      /* snow storm nord4 */
+      --accent: #5e81ac;    /* frost nord10 */
+      --accent-hover: #3b5c86;
     }
 
     @media (prefers-color-scheme: dark) {
       :root:not([data-theme="light"]) {
-        --bg: #16171a;
-        --ink: #e7e5df;
-        --muted: #9b988f;
-        --rule: #2c2d31;
-        --accent: #8fb0d4;
-        --accent-hover: #b4cce6;
+        --bg: #2e3440;      /* polar night nord0 */
+        --ink: #eceff4;     /* snow storm nord6 */
+        --muted: #97a0b3;
+        --rule: #3b4252;    /* polar night nord1 */
+        --accent: #88c0d0;  /* frost nord8 */
+        --accent-hover: #a3d2de;
       }
     }
 
     :root[data-theme="dark"] {
-      --bg: #16171a;
-      --ink: #e7e5df;
-      --muted: #9b988f;
-      --rule: #2c2d31;
-      --accent: #8fb0d4;
-      --accent-hover: #b4cce6;
+      --bg: #2e3440;
+      --ink: #eceff4;
+      --muted: #97a0b3;
+      --rule: #3b4252;
+      --accent: #88c0d0;
+      --accent-hover: #a3d2de;
     }
 
     * {
