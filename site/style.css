@@ -1,41 +1,17 @@
-/* Nord palette (https://www.nordtheme.com) */
+/* Dracula palette (https://draculatheme.com) */
 :root {
-  --bg: #eceff4;        /* snow storm nord6 */
-  --ink: #2e3440;       /* polar night nord0 */
-  --muted: #4c566a;     /* polar night nord3 */
-  --rule: #d8dee9;      /* snow storm nord4 */
-  --accent: #5e81ac;    /* frost nord10 */
-  --accent-hover: #3b5c86;
-  --card: #ffffff;
-  /* Fixed Nord bands for the bar, hero, and footer */
-  --band: #2e3440;      /* polar night nord0 */
-  --band-ink: #eceff4;
-  --band-muted: #aeb6c7;
-  --band-rule: rgba(236, 239, 244, 0.14);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #2e3440;
-    --ink: #eceff4;
-    --muted: #97a0b3;
-    --rule: #3b4252;
-    --accent: #88c0d0;  /* frost nord8 */
-    --accent-hover: #a3d2de;
-    --card: #353c4a;
-    --band: #262b33;
-  }
-}
-
-:root[data-theme="dark"] {
-  --bg: #2e3440;
-  --ink: #eceff4;
-  --muted: #97a0b3;
-  --rule: #3b4252;
-  --accent: #88c0d0;
-  --accent-hover: #a3d2de;
-  --card: #353c4a;
-  --band: #262b33;
+  --bg: #282a36;           /* background */
+  --ink: #f8f8f2;          /* foreground */
+  --muted: #6272a4;        /* comment */
+  --rule: #44475a;         /* current line */
+  --accent: #bd93f9;       /* purple */
+  --accent-hover: #ff79c6; /* pink */
+  --card: #343746;
+  /* Dark bands for the bar, hero, and footer */
+  --band: #21222c;
+  --band-ink: #f8f8f2;
+  --band-muted: #6272a4;
+  --band-rule: rgba(248, 248, 242, 0.12);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -100,8 +76,9 @@ body {
 /* ---------- HERO (home) ---------- */
 .hero {
   background:
-    radial-gradient(1200px 400px at 70% -10%, rgba(136, 192, 208, 0.35), transparent 60%),
-    linear-gradient(135deg, #3b4252 0%, #434c5e 45%, #5e81ac 100%);
+    radial-gradient(1000px 380px at 75% -20%, rgba(189, 147, 249, 0.30), transparent 60%),
+    radial-gradient(760px 300px at 12% 120%, rgba(255, 121, 198, 0.16), transparent 60%),
+    linear-gradient(135deg, #282a36 0%, #343746 55%, #44475a 100%);
   color: var(--band-ink);
   text-align: center;
   padding: 5.5rem 1.5rem 5rem;
@@ -114,13 +91,13 @@ body {
   letter-spacing: -0.01em;
 }
 
-.hero .tagline { font-size: 1.15rem; color: #e2e8f2; margin-top: 0.8rem; }
+.hero .tagline { font-size: 1.15rem; color: #f8f8f2; margin-top: 0.8rem; }
 
 .hero .verse {
   max-width: 34rem;
   margin: 1.4rem auto 0;
   font-style: italic;
-  color: #d4dcea;
+  color: #f8f8f2;
 }
 
 .hero-quote {
@@ -135,7 +112,7 @@ body {
   font-style: italic;
   font-size: 1.1rem;
   line-height: 1.6;
-  color: #d8e0ec;
+  color: #f8f8f2;
 }
 
 .hero-quote .quote-cite {
@@ -146,7 +123,7 @@ body {
   font-size: 0.78rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #aeb6c7;
+  color: #bd93f9;
 }
 
 .btn {
@@ -159,26 +136,26 @@ body {
   text-decoration: none;
   padding: 0.75rem 1.6rem;
   border-radius: 2px;
-  background: #88c0d0;
-  color: #2e3440;
-  border: 1px solid #88c0d0;
+  background: #bd93f9;
+  color: #282a36;
+  border: 1px solid #bd93f9;
   transition: background 0.15s, color 0.15s;
 }
 
-.btn:hover { background: transparent; color: #eceff4; }
+.btn:hover { background: transparent; color: #f8f8f2; }
 
 /* ---------- PAGE HEADER (subpages) ---------- */
 .page-header {
   background:
-    radial-gradient(900px 300px at 80% -40%, rgba(136, 192, 208, 0.28), transparent 60%),
-    linear-gradient(135deg, #3b4252 0%, #434c5e 100%);
+    radial-gradient(900px 300px at 80% -40%, rgba(189, 147, 249, 0.26), transparent 60%),
+    linear-gradient(135deg, #282a36 0%, #343746 100%);
   color: var(--band-ink);
   padding: 3rem 1.5rem;
 }
 
 .page-header .inner { max-width: 44rem; margin: 0 auto; }
 .page-header h1 { font-size: 2.2rem; font-weight: 600; }
-.page-header p { color: #cdd6e4; margin-top: 0.35rem; }
+.page-header p { color: #e9e9f3; margin-top: 0.35rem; }
 
 /* ---------- CONTENT ---------- */
 main { flex: 1; max-width: 44rem; margin: 0 auto; width: 100%; padding: 0 1.5rem; }
