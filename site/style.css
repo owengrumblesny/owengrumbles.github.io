@@ -124,7 +124,7 @@ body {
 }
 
 .hero-quote {
-  max-width: 38rem;
+  max-width: 26rem;
   margin: 1.6rem auto 0;
   transition: opacity 0.5s ease;
 }
