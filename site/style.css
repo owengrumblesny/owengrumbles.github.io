@@ -1,0 +1,207 @@
+/* Nord palette (https://www.nordtheme.com) */
+:root {
+  --bg: #eceff4;        /* snow storm nord6 */
+  --ink: #2e3440;       /* polar night nord0 */
+  --muted: #4c566a;     /* polar night nord3 */
+  --rule: #d8dee9;      /* snow storm nord4 */
+  --accent: #5e81ac;    /* frost nord10 */
+  --accent-hover: #3b5c86;
+  --card: #ffffff;
+  /* Fixed Nord bands for the bar, hero, and footer */
+  --band: #2e3440;      /* polar night nord0 */
+  --band-ink: #eceff4;
+  --band-muted: #aeb6c7;
+  --band-rule: rgba(236, 239, 244, 0.14);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #2e3440;
+    --ink: #eceff4;
+    --muted: #97a0b3;
+    --rule: #3b4252;
+    --accent: #88c0d0;  /* frost nord8 */
+    --accent-hover: #a3d2de;
+    --card: #353c4a;
+    --band: #262b33;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #2e3440;
+  --ink: #eceff4;
+  --muted: #97a0b3;
+  --rule: #3b4252;
+  --accent: #88c0d0;
+  --accent-hover: #a3d2de;
+  --card: #353c4a;
+  --band: #262b33;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.75;
+  font-size: 1.1rem;
+  -webkit-font-smoothing: antialiased;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ---------- TOP BAR ---------- */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--band);
+  border-bottom: 1px solid var(--band-rule);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.5rem;
+  padding: 0.85rem 1.5rem;
+}
+
+.brand {
+  color: var(--band-ink);
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+}
+
+.topnav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.6rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.topnav a {
+  color: var(--band-muted);
+  text-decoration: none;
+  padding-bottom: 0.2rem;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.topnav a:hover { color: var(--band-ink); border-bottom-color: var(--accent); }
+.topnav a.current { color: var(--band-ink); border-bottom-color: var(--accent); }
+
+/* ---------- HERO (home) ---------- */
+.hero {
+  background:
+    radial-gradient(1200px 400px at 70% -10%, rgba(136, 192, 208, 0.35), transparent 60%),
+    linear-gradient(135deg, #3b4252 0%, #434c5e 45%, #5e81ac 100%);
+  color: var(--band-ink);
+  text-align: center;
+  padding: 5.5rem 1.5rem 5rem;
+}
+
+.hero h1 {
+  font-size: clamp(2.4rem, 6vw, 3.6rem);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.hero .tagline { font-size: 1.15rem; color: #e2e8f2; margin-top: 0.8rem; }
+
+.hero .verse {
+  max-width: 34rem;
+  margin: 1.4rem auto 0;
+  font-style: italic;
+  color: #d4dcea;
+}
+
+.btn {
+  display: inline-block;
+  margin-top: 2rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  padding: 0.75rem 1.6rem;
+  border-radius: 2px;
+  background: #88c0d0;
+  color: #2e3440;
+  border: 1px solid #88c0d0;
+  transition: background 0.15s, color 0.15s;
+}
+
+.btn:hover { background: transparent; color: #eceff4; }
+
+/* ---------- PAGE HEADER (subpages) ---------- */
+.page-header {
+  background:
+    radial-gradient(900px 300px at 80% -40%, rgba(136, 192, 208, 0.28), transparent 60%),
+    linear-gradient(135deg, #3b4252 0%, #434c5e 100%);
+  color: var(--band-ink);
+  padding: 3rem 1.5rem;
+}
+
+.page-header .inner { max-width: 44rem; margin: 0 auto; }
+.page-header h1 { font-size: 2.2rem; font-weight: 600; }
+.page-header p { color: #cdd6e4; margin-top: 0.35rem; }
+
+/* ---------- CONTENT ---------- */
+main { flex: 1; max-width: 44rem; margin: 0 auto; width: 100%; padding: 0 1.5rem; }
+
+section { padding: 3rem 0; border-bottom: 1px solid var(--rule); }
+section:last-of-type { border-bottom: none; }
+
+h2 { font-size: 1.6rem; font-weight: 600; margin-bottom: 1.1rem; }
+h2 .mark { display: block; width: 2.5rem; height: 3px; background: var(--accent); margin-top: 0.7rem; }
+
+h3 { font-size: 1.2rem; font-weight: 600; margin-bottom: 0.3rem; }
+
+p + p { margin-top: 1.1rem; }
+
+a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--rule); }
+main a:hover { color: var(--accent-hover); border-bottom-color: var(--accent); }
+
+/* writing / lists */
+.list { list-style: none; margin-top: 0.5rem; }
+.list li { padding: 1.1rem 0; border-bottom: 1px solid var(--rule); }
+.list li:last-child { border-bottom: none; }
+.list .title { font-size: 1.15rem; }
+.list .meta {
+  display: block;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-top: 0.2rem;
+}
+.list .summary { color: var(--muted); margin-top: 0.3rem; }
+.empty { color: var(--muted); font-style: italic; }
+
+.lede { font-size: 1.2rem; color: var(--muted); }
+
+/* ---------- FOOTER ---------- */
+footer {
+  background: var(--band);
+  color: var(--band-muted);
+  text-align: center;
+  padding: 2.5rem 1.5rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 0.85rem;
+  line-height: 1.7;
+}
+
+footer a { color: var(--band-ink); text-decoration: none; border-bottom: 1px solid var(--band-rule); }
+footer a:hover { border-bottom-color: var(--accent); }
+
+@media (max-width: 560px) {
+  .topbar { justify-content: center; text-align: center; }
+  .topnav { justify-content: center; gap: 1.1rem; }
+}

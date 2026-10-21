@@ -6,227 +6,44 @@
   <title>Owen Grumbles</title>
   <meta name="description" content="Owen Grumbles — writing on philosophy and history.">
   <meta name="license" content="Code: GPL-3.0. Writings: CC BY 4.0. Graphics and assets: All rights reserved.">
-  <style>
-    /* Nord palette (https://www.nordtheme.com) */
-    :root {
-      --bg: #eceff4;        /* snow storm nord6 */
-      --ink: #2e3440;       /* polar night nord0 */
-      --muted: #4c566a;     /* polar night nord3 */
-      --rule: #d8dee9;      /* snow storm nord4 */
-      --accent: #5e81ac;    /* frost nord10 */
-      --accent-hover: #3b5c86;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      :root:not([data-theme="light"]) {
-        --bg: #2e3440;      /* polar night nord0 */
-        --ink: #eceff4;     /* snow storm nord6 */
-        --muted: #97a0b3;
-        --rule: #3b4252;    /* polar night nord1 */
-        --accent: #88c0d0;  /* frost nord8 */
-        --accent-hover: #a3d2de;
-      }
-    }
-
-    :root[data-theme="dark"] {
-      --bg: #2e3440;
-      --ink: #eceff4;
-      --muted: #97a0b3;
-      --rule: #3b4252;
-      --accent: #88c0d0;
-      --accent-hover: #a3d2de;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
-      background: var(--bg);
-      color: var(--ink);
-      line-height: 1.75;
-      font-size: 1.12rem;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    .wrap {
-      max-width: 40rem;
-      margin: 0 auto;
-      padding: 5.5rem 1.5rem 4rem;
-    }
-
-    header {
-      margin-bottom: 3.5rem;
-    }
-
-    h1 {
-      font-size: 2.3rem;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-      line-height: 1.15;
-    }
-
-    .tagline {
-      color: var(--muted);
-      font-size: 1.05rem;
-      margin-top: 0.4rem;
-    }
-
-    nav {
-      margin-top: 1.6rem;
-      display: flex;
-      gap: 1.4rem;
-      flex-wrap: wrap;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-      font-size: 0.82rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-    }
-
-    nav a {
-      color: var(--muted);
-      text-decoration: none;
-      padding-bottom: 0.15rem;
-      border-bottom: 1px solid transparent;
-      transition: color 0.15s, border-color 0.15s;
-    }
-
-    nav a:hover {
-      color: var(--ink);
-      border-bottom-color: var(--accent);
-    }
-
-    section {
-      margin-top: 3rem;
-    }
-
-    h2 {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-      font-size: 0.8rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--muted);
-      margin-bottom: 1.1rem;
-      padding-bottom: 0.5rem;
-      border-bottom: 1px solid var(--rule);
-    }
-
-    p + p {
-      margin-top: 1.1rem;
-    }
-
-    a {
-      color: var(--accent);
-      text-decoration: none;
-      border-bottom: 1px solid var(--rule);
-      transition: color 0.15s, border-color 0.15s;
-    }
-
-    section a:hover {
-      color: var(--accent-hover);
-      border-bottom-color: var(--accent);
-    }
-
-    .writing {
-      list-style: none;
-    }
-
-    .writing li {
-      padding: 0.9rem 0;
-      border-bottom: 1px solid var(--rule);
-    }
-
-    .writing li:first-child {
-      padding-top: 0;
-    }
-
-    .writing .title {
-      font-size: 1.15rem;
-    }
-
-    .writing .meta {
-      display: block;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-      font-size: 0.8rem;
-      color: var(--muted);
-      letter-spacing: 0.02em;
-      margin-top: 0.2rem;
-    }
-
-    .empty {
-      color: var(--muted);
-      font-style: italic;
-    }
-
-    footer {
-      margin-top: 4.5rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid var(--rule);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-      font-size: 0.82rem;
-      color: var(--muted);
-      line-height: 1.6;
-    }
-
-    footer a {
-      color: var(--muted);
-      border-bottom-color: transparent;
-    }
-
-    footer a:hover {
-      color: var(--ink);
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="wrap">
 
-    <header>
-      <h1>Owen Grumbles</h1>
-      <p class="tagline">Philosophy and history.</p>
-      <nav>
-        <a href="#about">About</a>
-        <a href="#writing">Writing</a>
-        <a href="#contact">Contact</a>
-      </nav>
-    </header>
+  <header class="topbar">
+    <a class="brand" href="index.html">Owen Grumbles</a>
+    <nav class="topnav">
+      <a href="index.html" class="current">Home</a>
+      <a href="about.html">About</a>
+      <a href="writing.html">Writing</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
 
-    <main>
-      <section id="about">
-        <h2>About</h2>
-        <p>Replace this with a few sentences about who you are and the questions you work on — the areas of philosophy and history you care about, and what you're trying to do with your writing.</p>
-      </section>
+  <section class="hero">
+    <h1>Owen Grumbles</h1>
+    <p class="tagline">Philosophy &amp; History</p>
+    <p class="verse">A short line of welcome or a favorite quotation goes here &mdash; something that sets the tone for the work.</p>
+    <a class="btn" href="writing.html">Read the writing</a>
+  </section>
 
-      <section id="writing">
-        <h2>Writing</h2>
-        <!--
-          Add an essay by copying this line and filling it in:
-          <li><span class="title"><a href="essays/my-essay.html">Essay title</a></span><span class="meta">October 2026</span></li>
-        -->
-        <ul class="writing">
-          <li class="empty">Essays and notes will appear here.</li>
-        </ul>
-      </section>
+  <main>
+    <section>
+      <h2>Welcome<span class="mark"></span></h2>
+      <p class="lede">A one-line introduction &mdash; who you are and what this site is for.</p>
+      <p>Replace this with a short paragraph. Say what you write about, the questions you keep returning to, and what a visitor will find here. Keep it to a few sentences; the <a href="about.html">About</a> page is where the longer version goes.</p>
+    </section>
 
-      <section id="contact">
-        <h2>Contact</h2>
-        <p>Email: <a href="mailto:owengrumblesny@gmail.com">owengrumblesny@gmail.com</a></p>
-      </section>
-    </main>
+    <section>
+      <h2>Recent Writing<span class="mark"></span></h2>
+      <p>The latest essays and notes will be listed here. For now, the full collection lives on the <a href="writing.html">Writing</a> page.</p>
+    </section>
+  </main>
 
-    <footer>
-      &copy; 2026 Owen Grumbles. Writing licensed under
-      <a href="https://creativecommons.org/licenses/by/4.0/">CC&nbsp;BY&nbsp;4.0</a>.
-    </footer>
+  <footer>
+    &copy; 2026 Owen Grumbles &middot; Writing licensed under
+    <a href="https://creativecommons.org/licenses/by/4.0/">CC&nbsp;BY&nbsp;4.0</a>
+  </footer>
 
-  </div>
 </body>
 </html>
