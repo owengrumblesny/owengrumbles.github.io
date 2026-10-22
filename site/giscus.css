@@ -1,0 +1,125 @@
+/*
+  Custom giscus theme — "Metal" (black + electric blue), to match the site.
+  Point giscus at it with:
+    data-theme="https://owengrumblesny.github.io/giscus.css"
+  Loaded inside the giscus comment iframe; giscus supplies the layout,
+  this file supplies the colors (GitHub Primer variables) plus a few tweaks.
+*/
+
+main {
+  --color-prettylights-syntax-comment: #6a86ad;
+  --color-prettylights-syntax-constant: #79c0ff;
+  --color-prettylights-syntax-entity: #8fb3df;
+  --color-prettylights-syntax-storage-modifier-import: #c9ddf5;
+  --color-prettylights-syntax-entity-tag: #6fc4ff;
+  --color-prettylights-syntax-keyword: #ff7b72;
+  --color-prettylights-syntax-string: #a5d6ff;
+  --color-prettylights-syntax-variable: #ffa657;
+  --color-prettylights-syntax-brackethighlighter-unmatched: #f85149;
+  --color-prettylights-syntax-invalid-illegal-text: #f0f6fc;
+  --color-prettylights-syntax-invalid-illegal-bg: #8e1519;
+  --color-prettylights-syntax-carriage-return-text: #f0f6fc;
+  --color-prettylights-syntax-carriage-return-bg: #b62324;
+  --color-prettylights-syntax-string-regexp: #6fc4ff;
+  --color-prettylights-syntax-markup-list: #f2cc60;
+  --color-prettylights-syntax-markup-heading: #00aaff;
+  --color-prettylights-syntax-markup-italic: #c9ddf5;
+  --color-prettylights-syntax-markup-bold: #c9ddf5;
+  --color-prettylights-syntax-markup-deleted-text: #ffdcd7;
+  --color-prettylights-syntax-markup-deleted-bg: #67060c;
+  --color-prettylights-syntax-markup-inserted-text: #aff5b4;
+  --color-prettylights-syntax-markup-inserted-bg: #033a16;
+  --color-prettylights-syntax-markup-changed-text: #ffdfb6;
+  --color-prettylights-syntax-markup-changed-bg: #5a1e02;
+  --color-prettylights-syntax-markup-ignored-text: #c9ddf5;
+  --color-prettylights-syntax-markup-ignored-bg: #1158c7;
+  --color-prettylights-syntax-meta-diff-range: #8fb3df;
+  --color-prettylights-syntax-brackethighlighter-angle: #6a86ad;
+  --color-prettylights-syntax-sublimelinter-gutter-mark: #2b3b55;
+  --color-prettylights-syntax-constant-other-reference-link: #a5d6ff;
+
+  --color-btn-text: #c9ddf5;
+  --color-btn-bg: #080d18;
+  --color-btn-border: rgba(0, 170, 255, 0.30);
+  --color-btn-shadow: 0 0 0 transparent;
+  --color-btn-inset-shadow: 0 0 0 transparent;
+  --color-btn-hover-bg: #0f1829;
+  --color-btn-hover-border: #00aaff;
+  --color-btn-active-bg: #0c1322;
+  --color-btn-active-border: #00aaff;
+  --color-btn-selected-bg: #080d18;
+  --color-btn-counter-bg: #10182a;
+
+  --color-btn-primary-text: #02060d;
+  --color-btn-primary-bg: #00aaff;
+  --color-btn-primary-border: rgba(0, 170, 255, 0.5);
+  --color-btn-primary-shadow: 0 0 14px rgba(0, 170, 255, 0.4);
+  --color-btn-primary-inset-shadow: 0 0 0 transparent;
+  --color-btn-primary-hover-bg: #38bdff;
+  --color-btn-primary-hover-border: #00aaff;
+  --color-btn-primary-selected-bg: #0098e0;
+  --color-btn-primary-disabled-text: rgba(2, 6, 13, 0.6);
+  --color-btn-primary-disabled-bg: rgba(0, 170, 255, 0.45);
+  --color-btn-primary-disabled-border: transparent;
+
+  --color-action-list-item-default-hover-bg: rgba(0, 170, 255, 0.08);
+  --color-segmented-control-bg: #080d18;
+  --color-segmented-control-button-bg: #000000;
+  --color-segmented-control-button-selected-border: #00aaff;
+
+  --color-fg-default: #c9ddf5;
+  --color-fg-muted: #8fb3df;
+  --color-fg-subtle: #4f6690;
+  --color-canvas-default: #000000;
+  --color-canvas-overlay: #05070d;
+  --color-canvas-inset: #04060d;
+  --color-canvas-subtle: #06091200;
+  --color-border-default: #142033;
+  --color-border-muted: #0e1626;
+  --color-neutral-muted: rgba(0, 170, 255, 0.10);
+  --color-accent-fg: #38bdff;
+  --color-accent-emphasis: #00aaff;
+  --color-accent-muted: rgba(0, 170, 255, 0.35);
+  --color-accent-subtle: rgba(0, 170, 255, 0.10);
+  --color-success-fg: #3fb950;
+  --color-success-emphasis: #238636;
+  --color-attention-fg: #d29922;
+  --color-attention-muted: rgba(187, 128, 9, 0.4);
+  --color-attention-subtle: rgba(187, 128, 9, 0.15);
+  --color-danger-fg: #f85149;
+  --color-danger-muted: rgba(248, 81, 73, 0.4);
+  --color-danger-subtle: rgba(248, 81, 73, 0.1);
+  --color-primer-shadow-inset: 0 0 0 transparent;
+  --color-scale-gray-7: #142033;
+  --color-scale-blue-8: #002d4d;
+
+  color-scheme: dark;
+}
+
+main {
+  background-color: var(--color-canvas-default);
+}
+
+.gsc-comments > .gsc-header {
+  color: var(--color-fg-muted);
+}
+
+.gsc-comment > .gsc-comment-box,
+.gsc-comment > div {
+  border-color: var(--color-border-default) !important;
+}
+
+.gsc-comment-content a,
+.gsc-header a,
+.markdown a {
+  color: var(--color-accent-fg);
+}
+
+.gsc-reactions-count {
+  color: var(--color-fg-muted);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 170, 255, 0.35);
+  border-radius: 6px;
+}

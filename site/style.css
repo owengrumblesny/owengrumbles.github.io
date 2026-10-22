@@ -290,6 +290,33 @@ footer {
 footer a { color: var(--electric-soft); text-decoration: none; border-bottom: 1px solid var(--steel); }
 footer a:hover { color: var(--white); }
 
+/* ---------- ARTICLE / ESSAY ---------- */
+.back {
+  display: inline-block;
+  margin-bottom: 1.2rem;
+  font-family: var(--sans);
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--electric-soft);
+  border-bottom: none;
+}
+.back:hover { color: var(--white); text-shadow: 0 0 10px var(--glow); border-bottom: none; }
+
+article { padding: 2.6rem 0; }
+article p { margin-top: 1rem; }
+article h3 { margin-top: 1.8rem; }
+article blockquote {
+  border-left: 3px solid var(--electric);
+  box-shadow: -1px 0 14px rgba(0, 170, 255, 0.25);
+  padding-left: 1.2rem;
+  margin: 1.4rem 0;
+  font-style: italic;
+  color: var(--electric-soft);
+}
+
+.comments { border-top: 1px solid var(--steel); }
+
 /* ---------- MOTION: breathing glow ---------- */
 @media (prefers-reduced-motion: no-preference) {
   .hero h1 { animation: titleGlow 4s ease-in-out infinite; }
